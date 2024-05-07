@@ -36,7 +36,7 @@ int get_manifest(const char *file_path)
   return status;
 }
 
-int parse_manifest(const char *file_path, latest_version *latest_version, version_info *version_info_array)
+int parse_manifest(const char *file_path, latest_version *latest_version, version_info **version_info_array)
 {
   FILE *fp;
   char *buffer;
@@ -45,6 +45,8 @@ int parse_manifest(const char *file_path, latest_version *latest_version, versio
   cJSON *json;
   cJSON *latest;
 
+
+  //fp is file pointer
   fp = fopen(file_path, "rb");
 
   if (fp == NULL)
@@ -53,9 +55,9 @@ int parse_manifest(const char *file_path, latest_version *latest_version, versio
     return 1;
   }
 
-  fseek(fp, 0, SEEK_END);
-  file_size = ftell(fp);
-  rewind(fp);
+  fseek(fp, 0, SEEK_END); // positions file pointer at end of file
+  file_size = ftell(fp); // ftell determins the current position of the file pointer, assines value to file size, 
+  rewind(fp); // puts file pointer at begining of file
 
   buffer = (char *)malloc(sizeof(char) * file_size);
   if (buffer == NULL)
@@ -100,7 +102,12 @@ int parse_manifest(const char *file_path, latest_version *latest_version, versio
   if (cJSON_IsArray(versions))
   {
     int array_size = cJSON_GetArraySize(versions);
-    version_info_array = (version_info *)malloc(sizeof(version_info));
+    *version_info_array = (version_info *)malloc(sizeof(version_info));
+    if (version_info_array == NULL)
+    {
+      fprintf(stderr, "Memory error.");
+      exit(1);
+    }
 
     if (version_info_array == NULL)
     {
@@ -120,7 +127,7 @@ int parse_manifest(const char *file_path, latest_version *latest_version, versio
       version_info.sha1 = cJSON_GetObjectItemCaseSensitive(version, "sha1")->valuestring;
       version_info.compliance_level = cJSON_GetObjectItemCaseSensitive(version, "complianceLevel")->valueint;
 
-      version_info_array[i] = version_info;
+      (*version_info_array)[i] = version_info;
     }
   }
 
