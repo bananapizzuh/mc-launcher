@@ -101,7 +101,7 @@ int parse_manifest(const char *file_path, latest_version *latest_version, versio
   if (cJSON_IsArray(versions))
   {
     int array_size = cJSON_GetArraySize(versions);
-    *version_info_array = (version_info *)malloc(sizeof(version_info));
+    *version_info_array = (version_info *)malloc(sizeof(version_info) * array_size);
     if (version_info_array == NULL)
     {
       fprintf(stderr, "Memory error.");

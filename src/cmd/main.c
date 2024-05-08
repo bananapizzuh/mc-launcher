@@ -3,6 +3,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include "manifest.h"
+#include "version.h"
 
 int main()
 {
@@ -27,6 +28,13 @@ int main()
 
   printf("Latest release: %s\n", latest.release);
   printf("Latest snapshot: %s\n", latest.snapshot);
-  printf("%s", version_info_array[10].id);
+  printf("%s\n", version_info_array[10].id);
+  printf("%s\n", version_info_array[10].url);
+
+  char *test_version = version_info_array[10].url;
+  printf("Version 10 id: %s\n", test_version);
+  free(version_info_array);
+
+  get_version_json("assets/version.json", test_version);
   return 0;
 }
