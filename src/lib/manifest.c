@@ -45,8 +45,7 @@ int parse_manifest(const char *file_path, latest_version *latest_version, versio
   cJSON *json;
   cJSON *latest;
 
-
-  //fp is file pointer
+  // fp is file pointer
   fp = fopen(file_path, "rb");
 
   if (fp == NULL)
@@ -56,8 +55,8 @@ int parse_manifest(const char *file_path, latest_version *latest_version, versio
   }
 
   fseek(fp, 0, SEEK_END); // positions file pointer at end of file
-  file_size = ftell(fp); // ftell determins the current position of the file pointer, assines value to file size, 
-  rewind(fp); // puts file pointer at begining of file
+  file_size = ftell(fp);  // ftell determins the current position of the file pointer, assines value to file size,
+  rewind(fp);             // puts file pointer at begining of file
 
   buffer = (char *)malloc(sizeof(char) * file_size);
   if (buffer == NULL)
@@ -115,7 +114,7 @@ int parse_manifest(const char *file_path, latest_version *latest_version, versio
       exit(1);
     }
 
-    for (int i = 0; i < array_size / 10; i++)
+    for (int i = 0; i < array_size; i++)
     {
       cJSON *version = cJSON_GetArrayItem(versions, i);
       version_info version_info;
