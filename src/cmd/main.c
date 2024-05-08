@@ -26,15 +26,8 @@ int main()
     fprintf(stderr, "Error parsing manifest.json file.\n");
   }
 
-  printf("Latest release: %s\n", latest.release);
-  printf("Latest snapshot: %s\n", latest.snapshot);
-  printf("%s\n", version_info_array[10].id);
-  printf("%s\n", version_info_array[10].url);
+  char *v1_20_6 = version_info_array[1].url;
 
-  char *test_version = version_info_array[10].url;
-  printf("Version 10 id: %s\n", test_version);
-  free(version_info_array);
-
-  get_version_json("assets/version.json", test_version);
+  get_version_json("assets/version.json", v1_20_6);
   return 0;
 }
