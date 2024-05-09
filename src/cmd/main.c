@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include "manifest.h"
 #include "version.h"
+#include "asset_index.h"
 #include <sys/utsname.h>
 
 int main()
@@ -14,17 +15,17 @@ int main()
   uname(&uts);
 
   struct stat st = {0};
-  if (stat("assets", &st) == -1)
+  if (stat("mc", &st) == -1)
   {
-    mkdir("assets", 0700);
+    mkdir("mc", 0700);
   }
 
-  if (get_manifest("assets/manifest.json") != 0)
+  if (get_manifest("mc/manifest.json") != 0)
   {
     fprintf(stderr, "Error getting manifest.json file.\n");
     return 1;
   }
-  if (parse_manifest("assets/manifest.json", &latest, &version_info_array) != 0)
+  if (parse_manifest("mc/manifest.json", &latest, &version_info_array) != 0)
   {
     fprintf(stderr, "Error parsing manifest.json file.\n");
   }
@@ -32,7 +33,8 @@ int main()
 
   char *v1_20_6 = version_info_array[1].url;
 
-  get_version_json("assets/version.json", v1_20_6);
-  parse_version_json("assets/version.json", "assets/libraries/");
+  get_version_json("mc/versions/1.20.6.json", v1_20_6);
+  parse_version_json("mc/version.json", "mc/libraries/", "mc/assets/indexes/");
+  // parse_asset_index("mc/assets/indexes/16.json", "mc/assets/objects");
   return 0;
 }

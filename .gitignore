@@ -52,5 +52,7 @@ Mkfile.old
 dkms.conf
 
 build/
+mc/
 .vscode/
 assets/
+run_game.sh
