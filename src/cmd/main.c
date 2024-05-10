@@ -6,13 +6,16 @@
 #include "version.h"
 #include "asset_index.h"
 #include <sys/utsname.h>
+#include <string.h>
 
 int main()
 {
   latest_version latest;
   version_info *version_info_array;
-  struct utsname uts;
-  uname(&uts);
+
+  char temp_file_name[] = "mc/versions/1.20.6.jar";
+  temp_file_name[strlen(temp_file_name) - strlen(strrchr(temp_file_name, '/')) + 1] = '\0';
+  printf("file name %s\n", temp_file_name);
 
   struct stat st = {0};
   if (stat("mc", &st) == -1)
@@ -29,12 +32,11 @@ int main()
   {
     fprintf(stderr, "Error parsing manifest.json file.\n");
   }
-  printf("System is %s\n", uts.sysname);
 
   char *v1_20_6 = version_info_array[1].url;
 
   get_version_json("mc/versions/1.20.6.json", v1_20_6);
-  parse_version_json("mc/version.json", "mc/libraries/", "mc/assets/indexes/");
+  parse_version_json("mc/version.json", "mc/libraries/", "mc/assets/indexes/", "mc/versions/1.20.6.jar");
   // parse_asset_index("mc/assets/indexes/16.json", "mc/assets/objects");
   return 0;
 }

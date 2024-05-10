@@ -2,6 +2,6 @@
 #define VERSION_H
 
 int get_version_json(const char *file_path, const char *url);
-int parse_version_json(const char *file_path, const char *lib_path, const char *asset_idx_path);
+int parse_version_json(const char *file_path, const char *lib_path, const char *asset_idx_path, const char *client_jar_path);
 
 #endif

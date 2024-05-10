@@ -10,6 +10,21 @@
 
 #define PATH_MAX_STRING_SIZE 256
 
+char *url_encode(const char *str)
+{
+  CURL *curl = curl_easy_init();
+  if (curl)
+  {
+    char *output = curl_easy_escape(curl, str, strlen(str));
+    if (output)
+    {
+      return output;
+    }
+    curl_easy_cleanup(curl);
+  }
+  return NULL;
+}
+
 size_t write_data(void *ptr, size_t size, size_t nmemb, FILE *stream)
 {
   return fwrite(ptr, size, nmemb, stream);

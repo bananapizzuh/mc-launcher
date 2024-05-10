@@ -32,7 +32,7 @@ int get_version_json(const char *file_path, const char *url)
   return status;
 }
 
-int parse_version_json(const char *file_path, const char *lib_path, const char *asset_idx_path)
+int parse_version_json(const char *file_path, const char *lib_path, const char *asset_idx_path, const char *client_jar_path)
 {
   FILE *fp;
   char *buffer;
@@ -81,6 +81,37 @@ int parse_version_json(const char *file_path, const char *lib_path, const char *
     }
     cJSON_Delete(json);
     return 1;
+  }
+
+  cJSON *downloads = cJSON_GetObjectItemCaseSensitive(json, "downloads");
+  if (cJSON_IsObject(downloads))
+  {
+    cJSON *client = cJSON_GetObjectItemCaseSensitive(downloads, "client");
+    if (cJSON_IsObject(client))
+    {
+      cJSON *url = cJSON_GetObjectItemCaseSensitive(client, "url");
+      if (cJSON_IsString(url) && (url->valuestring != NULL))
+      {
+        struct stat st = {0};
+        char *token_path = strdup(client_jar_path);
+        token_path[strlen(token_path) - strlen(strrchr(token_path, '/')) + 1] = '\0';
+        printf("token_path%s\n", token_path);
+        if (stat(token_path, &st) == -1)
+        {
+          mkdir_p(token_path, 0700);
+        }
+        FILE *client_file;
+        printf("path: %s\n", client_jar_path);
+        client_file = fopen(client_jar_path, "w");
+        if (client_file == NULL)
+        {
+          fprintf(stderr, "Error in opning File");
+          exit(1);
+        }
+        curl_get(cJSON_GetObjectItemCaseSensitive(client, "url")->valuestring, client_file);
+        fclose(client_file);
+      }
+    }
   }
 
   cJSON *asset_index = cJSON_GetObjectItemCaseSensitive(json, "assetIndex");

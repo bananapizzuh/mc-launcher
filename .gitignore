@@ -45,6 +45,7 @@
 # Kernel Module Compile Results
 *.mod*
 *.cmd
+.env
 .tmp_versions/
 modules.order
 Module.symvers
@@ -52,7 +53,6 @@ Mkfile.old
 dkms.conf
 
 build/
-mc/
 .vscode/
-assets/
+mc/
 run_game.sh
